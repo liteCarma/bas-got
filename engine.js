@@ -181,6 +181,7 @@ got = {
     var options = got.options;
     var url = _function_argument('url');
     var method = _function_argument('method') || 'POST';
+    var encoding = _function_argument('encoding') || 'UTF-8';
     var headers = _function_argument('headers') || {};
     var redirect = _function_argument('redirect') || options.redirect;
     var body = _function_argument('body') || '';
@@ -211,7 +212,7 @@ got = {
               general_timeout_next(timeout);
               http_client_post(url, ["data", body.toString()], {
                 "content-type": "custom/" + _contentType,
-                encoding: "UTF-8",
+                encoding: encoding,
                 method: method.toUpperCase(),
                 headers: got.headersStringify(headers)
               })!
@@ -219,7 +220,7 @@ got = {
               general_timeout_next(timeout);
               http_client_post_no_redirect(url, ["data", body.toString()], {
                 "content-type": "custom/" + _contentType,
-                encoding: "UTF-8",
+                encoding: encoding,
                 method: method.toUpperCase(),
                 headers: got.headersStringify(headers)
               })!
