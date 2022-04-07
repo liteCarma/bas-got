@@ -48,6 +48,7 @@ This module is a simple api for working directly through the code.
     },
     body: ''                    // string or data type object
     method: 'POST',             // optional, default 'POST'
+    encoding: 'UTF-8'            // optional, default 'UTF-8'
     redirect: true,             // optional
     attempts: 3,                // optional
     timeout: 60000,             // optional
