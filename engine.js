@@ -97,7 +97,7 @@ got = {
                 break;
               }
               case ('application/x-www-form-urlencoded'):
-              default: {
+              options: {
                 if (result!== '') {
                   result += '&';
                 }
@@ -118,20 +118,20 @@ got = {
   },
 
   get: function () {
-    var _default = got.options;
-    _url = _function_argument('url');
-    _method = _function_argument('method') || 'GET';
-    _headers = _function_argument('headers') || {};
-    _redirect = _function_argument('redirect') || _default.redirect;
-    _attempts = _function_argument('attempts') || _default.attempts;
-    _timeout = _function_argument('timeout') || _default.timeout;
-    _pause = _function_argument('pause') || _default.pause;
-    _status = _function_argument('status') || _default.status;
-    _notEmpty = _function_argument('notEmpty') || _default.notEmpty;
-    _json = _function_argument('json') || _default.json;
+    var options = got.options;
+    var url = _function_argument('url');
+    var method = _function_argument('method') || 'GET';
+    var headers = _function_argument('headers') || {};
+    var redirect = _function_argument('redirect') || options.redirect;
+    var attempts = _function_argument('attempts') || options.attempts;
+    var timeout = _function_argument('timeout') || options.timeout;
+    var pause = _function_argument('pause') || options.pause;
+    var statusAllow = _function_argument('status') || options.status;
+    var notEmpty = _function_argument('notEmpty') || options.notEmpty;
+    var json = _function_argument('json') || options.json;
 
     _do(function () {
-      _if(_iterator() > _attempts, function () {
+      _if(_iterator() > attempts, function () {
           fail_user("got error: " + VAR_LAST_ERROR)
         })!
 
@@ -143,56 +143,56 @@ got = {
             _break(1, true)
           })
 
-          _if_else(_redirect, function () {
-              general_timeout_next(_timeout);
-              http_client_get2(_url, {
-                method: _method.toUpperCase(),
-                headers: got.headersStringify(_headers)
+          _if_else(redirect, function () {
+              general_timeout_next(timeout);
+              http_client_get2(url, {
+                method: method.toUpperCase(),
+                headers: got.headersStringify(headers)
               })!
             }, function () {
-              general_timeout_next(_timeout);
-              http_client_get_no_redirect2(_url, {
-                method: _method.toUpperCase(),
-                headers: got.headersStringify(_headers)
+              general_timeout_next(timeout);
+              http_client_get_noredirect2(url, {
+                method: method.toUpperCase(),
+                headers: got.headersStringify(headers)
               })!
             })!
 
             var data = http_client_encoded_content("auto")
 
-          if (_notEmpty &&!data.trim()) {
-            fail_user(_url + ' empty response')
+          if (notEmpty &&!data.trim()) {
+            fail_user(url + ' empty response')
           }
-          if (_json) {
+          if (json) {
             data = JSON.parse(data);
           }
 
           var status = http_client_status()
-          if (_status.indexOf(status) < 0) {
-            fail_user(_url + ' http status: ' + status)
+          if (statusAllow.indexOf(status) < 0) {
+            fail_user(url + ' http status: ' + status)
           }
           _function_return(data)
         }, null)!
 
-        sleep(_pause)!
+        sleep(pause)!
     })!
   },
 
   post: function () {
-    var _default = got.options;
-    _url = _function_argument('url');
-    _method = _function_argument('method') || 'POST';
-    _headers = _function_argument('headers') || {};
-    _redirect = _function_argument('redirect') || _default.redirect;
-    _body = _function_argument('body') || '';
-    _attempts = _function_argument('attempts') || _default.attempts;
-    _timeout = _function_argument('timeout') || _default.timeout;
-    _pause = _function_argument('pause') || _default.pause;
-    _status = _function_argument('status') || _default.status;
-    _notEmpty = _function_argument('notEmpty') || _default.notEmpty;
-    _json = _function_argument('json') || _default.json;
+    var options = got.options;
+    var url = _function_argument('url');
+    var method = _function_argument('method') || 'POST';
+    var headers = _function_argument('headers') || {};
+    var redirect = _function_argument('redirect') || options.redirect;
+    var body = _function_argument('body') || '';
+    var attempts = _function_argument('attempts') || options.attempts;
+    var timeout = _function_argument('timeout') || options.timeout;
+    var pause = _function_argument('pause') || options.pause;
+    var statusAllow = _function_argument('status') || options.status;
+    var notEmpty = _function_argument('notEmpty') || options.notEmpty;
+    var json = _function_argument('json') || options.json;
 
     _do(function () {
-      _if(_iterator() > _attempts, function () {
+      _if(_iterator() > attempts, function () {
           fail_user("got error: " + VAR_LAST_ERROR)
         })!
 
@@ -204,47 +204,46 @@ got = {
             _break(1, true)
           })
 
-          _contentType = _headers['content-type'] || _headers['Content-Type'] || 'application/x-www-form-urlencoded';
-          delete _headers['content-type'];
-          delete _headers['Content-Type'];
-          _if_else(_redirect, function () {
-              general_timeout_next(_timeout);
-              http_client_post(_url, ["data", _body.toString()], {
+          _contentType = headers['content-type'] || headers['Content-Type'] || 'application/x-www-form-urlencoded';
+          delete headers['content-type'];
+          delete headers['Content-Type'];
+          _if_else(redirect, function () {
+              general_timeout_next(timeout);
+              http_client_post(url, ["data", body.toString()], {
                 "content-type": "custom/" + _contentType,
                 encoding: "UTF-8",
-                method: _method.toUpperCase(),
-                headers: got.headersStringify(_headers)
+                method: method.toUpperCase(),
+                headers: got.headersStringify(headers)
               })!
             }, function () {
-              general_timeout_next(_timeout);
-              http_client_post_no_redirect(_url, ["data", _body.toString()], {
+              general_timeout_next(timeout);
+              http_client_post_no_redirect(url, ["data", body.toString()], {
                 "content-type": "custom/" + _contentType,
                 encoding: "UTF-8",
-                method: _method.toUpperCase(),
-                headers: got.headersStringify(_headers)
+                method: method.toUpperCase(),
+                headers: got.headersStringify(headers)
               })!
             })!
 
             var data = http_client_encoded_content("auto")
 
-          if (_notEmpty &&!data.trim()) {
-            fail_user(_url + ' empty response')
+          if (notEmpty &&!data.trim()) {
+            fail_user(url + ' empty response')
           }
 
-          if (_json) {
+          if (json) {
             data = JSON.parse(data);
           }
 
-
           var status = http_client_status()
-          if (_status.indexOf(status) < 0) {
-            fail_user(_url + ' http status: ' + status)
+          if (statusAllow.indexOf(status) < 0) {
+            fail_user(url + ' http status: ' + status)
           }
 
           _function_return(data)
         }, null)!
 
-        sleep(_pause)!
+        sleep(pause)!
     })!
   }
 } 
