@@ -12,6 +12,7 @@ This module is a simple api for working directly through the code.
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36',
     },
     redirect: true, // auto redirect
+    timeout: 60000, // maximum request time
     attempts: 3,    // number of attempts in case of an error
     pause: 3000,    // timeout after error
     notEmpty: true, // empty response is an error
@@ -29,6 +30,7 @@ This module is a simple api for working directly through the code.
     method: 'GET',              // optional, default 'GET'
     redirect: true,             // optional
     attempts: 3,                // optional
+    timeout: 60000,             // optional
     pause: 3000,                // optional
     notEmpty: true,             // optional
     status: [200],              // optional
@@ -48,6 +50,7 @@ This module is a simple api for working directly through the code.
     method: 'POST',             // optional, default 'POST'
     redirect: true,             // optional
     attempts: 3,                // optional
+    timeout: 60000,             // optional
     pause: 3000,                // optional
     notEmpty: true,             // optional
     status: [200],              // optional

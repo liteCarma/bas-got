@@ -5,6 +5,7 @@ got = {
     },
     redirect: true,
     attempts: 3,
+    timeout: 60000,
     pause: 3000,
     notEmpty: true,
     status: [200],
@@ -123,6 +124,7 @@ got = {
     _headers = _function_argument('headers') || {};
     _redirect = _function_argument('redirect') || _default.redirect;
     _attempts = _function_argument('attempts') || _default.attempts;
+    _timeout = _function_argument('timeout') || _default.timeout;
     _pause = _function_argument('pause') || _default.pause;
     _status = _function_argument('status') || _default.status;
     _notEmpty = _function_argument('notEmpty') || _default.notEmpty;
@@ -142,11 +144,13 @@ got = {
           })
 
           _if_else(_redirect, function () {
+              general_timeout_next(_timeout);
               http_client_get2(_url, {
                 method: _method.toUpperCase(),
                 headers: got.headersStringify(_headers)
               })!
             }, function () {
+              general_timeout_next(_timeout);
               http_client_get_no_redirect2(_url, {
                 method: _method.toUpperCase(),
                 headers: got.headersStringify(_headers)
@@ -181,6 +185,7 @@ got = {
     _redirect = _function_argument('redirect') || _default.redirect;
     _body = _function_argument('body') || '';
     _attempts = _function_argument('attempts') || _default.attempts;
+    _timeout = _function_argument('timeout') || _default.timeout;
     _pause = _function_argument('pause') || _default.pause;
     _status = _function_argument('status') || _default.status;
     _notEmpty = _function_argument('notEmpty') || _default.notEmpty;
@@ -203,6 +208,7 @@ got = {
           delete _headers['content-type'];
           delete _headers['Content-Type'];
           _if_else(_redirect, function () {
+              general_timeout_next(_timeout);
               http_client_post(_url, ["data", _body.toString()], {
                 "content-type": "custom/" + _contentType,
                 encoding: "UTF-8",
@@ -210,6 +216,7 @@ got = {
                 headers: got.headersStringify(_headers)
               })!
             }, function () {
+              general_timeout_next(_timeout);
               http_client_post_no_redirect(_url, ["data", _body.toString()], {
                 "content-type": "custom/" + _contentType,
                 encoding: "UTF-8",
