@@ -1,11 +1,11 @@
-##"Got" this http module for Browser Automation Studio. 
+## "Got" this http module for Browser Automation Studio. 
 
-#####It is inspired by the got javascript module, but of course it is greatly simplified.
+##### It is inspired by the got javascript module, but of course it is greatly simplified.
 
 
 This module is a simple api for working directly through the code.
 
-#####Default options
+##### Default options
 ```
   options: {
     headers: {
@@ -19,7 +19,7 @@ This module is a simple api for working directly through the code.
     json: false,    // expect a response in json format and parse it immediately
   }
 ```
-#####method GET (HEAD, DELETE, TRACE, OPTIONS)
+##### method GET (HEAD, DELETE, TRACE, OPTIONS)
 ```
   _call_function(got.get,{
     url: 'http://example.com',
@@ -36,7 +36,7 @@ This module is a simple api for working directly through the code.
   })!
   var res = _result_function()
 ```
-#####method POST (PUT, PATCH)
+##### method POST (PUT, PATCH)
 ```
   _call_function(got.get,{
     url: 'http://example.com',
@@ -56,7 +56,7 @@ This module is a simple api for working directly through the code.
   var res = _result_function()
 ```
 
-#####method got.createData
+##### method got.createData
 
 createData is an auxiliary method for creating a request body.
 ```
