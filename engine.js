@@ -46,10 +46,10 @@ got = {
   },
 
   getValueContent: function(value) {
-    if (value.indexOf('file://') >=0) {
+    if (typeof value === 'string' && value.indexOf('file://') >=0) {
       return native("filesystem", "readfile", JSON.stringify({value: value.split('file://')[1],base64:false,from:0,to:0}))
     }
-    if (value.indexOf('base64://') >=0) {
+    if (typeof value === 'string' && value.indexOf('base64://') >=0) {
       return base64_decode(value.split('base64://')[1])
     }
     return value
@@ -148,11 +148,11 @@ got = {
                 str += '--' + boundary + '\r\n';
                 str += 'Content-Disposition: form-data; name="' + name +'";' 
 
-                if (value.indexOf('file://') >=0) {
+                if (typeof value === 'string' && value.indexOf('file://') >=0) {
                   var filename = value.split(/[/\\]/).pop()
                   str += 'filename="' + filename + '"\r\nContent-Type: application/octet-stream';
                 }
-                if (value.indexOf('base64://') >=0) {
+                if (typeof value === 'string' && value.indexOf('base64://') >=0) {
                   str += 'Content-Disposition: form-data; name="' + name + '"; filename="file.jpg"\r\nContent-Type: image/jpeg';
                 }
 
