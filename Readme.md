@@ -8,9 +8,7 @@ This module is a simple api for working directly through the code.
 ##### Default options
 ```
   options: {
-    headers: {
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36',
-    },
+    headers: {},
     redirect: true, // auto redirect
     timeout: 60000, // maximum request time
     attempts: 3,    // number of attempts in case of an error

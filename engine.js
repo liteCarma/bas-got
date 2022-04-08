@@ -1,8 +1,6 @@
 got = {
   options: {
-    headers: {
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36',
-    },
+    headers: {},
     redirect: true,
     attempts: 3,
     timeout: 60000,
@@ -255,7 +253,7 @@ got = {
     var url = _function_argument('url');
     var method = _function_argument('method') || 'POST';
     var encoding = _function_argument('encoding') || 'UTF-8';
-    var headers = _function_argument('headers') || {};
+    var headers = _function_argument('headers') || options.headers;
     var body = _function_argument('body') || [];
     var contentType = _function_argument('contentType') || 'urlencode';
     var redirect = _function_argument('redirect') || options.redirect;
