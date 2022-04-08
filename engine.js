@@ -21,7 +21,7 @@ got = {
 
     if (typeof headers === 'string') {
       var h = {};
-      headers.trim().split(/\r?\n/).forEach(function(row) {
+      headers.trim().split(/\r?\n/).forEach(function (row) {
         var p = row.split(':')
         var name = p[0].trim();
         var value = p.slice(1).join(':').trim();
@@ -45,11 +45,16 @@ got = {
     }).join('\r\n');
   },
 
-  getValueContent: function(value) {
-    if (typeof value === 'string' && value.indexOf('file://') >=0) {
-      return native("filesystem", "readfile", JSON.stringify({value: value.split('file://')[1],base64:false,from:0,to:0}))
+  getValueContent: function (value) {
+    if (typeof value === 'string' && value.indexOf('file://') >= 0) {
+      return native("filesystem", "readfile", JSON.stringify({
+        value: value.split('file://')[1],
+        base64: false,
+        from: 0,
+        to: 0
+      }))
     }
-    if (typeof value === 'string' && value.indexOf('base64://') >=0) {
+    if (typeof value === 'string' && value.indexOf('base64://') >= 0) {
       return base64_decode(value.split('base64://')[1])
     }
     return value
@@ -61,7 +66,7 @@ got = {
     }
 
     var isConstructor = contentType.indexOf('custom/') < 0
-    var data = isConstructor? [] : ['data'];
+    var data = isConstructor ? [] : ['data'];
 
     Object.defineProperties(data, {
       contentType: {
@@ -117,12 +122,12 @@ got = {
       toString: {
         enumerable: false,
         value: function () {
-          if(this.isConstructor) {
+          if (this.isConstructor) {
             if (this.contentType.indexOf('json') >= 0) {
               var json = {}
-              for(i = 0; i < this.length; i +=2) {
+              for (i = 0; i < this.length; i += 2) {
                 var name = this[i];
-                var value = this[i+1];
+                var value = this[i + 1];
                 json[name] = got.getValueContent(value);
               }
               return JSON.stringify(json)
@@ -130,10 +135,10 @@ got = {
 
             if (this.contentType.indexOf('urlencode') >= 0) {
               var str = '';
-              for(i = 0; i < this.length; i +=2) {
+              for (i = 0; i < this.length; i += 2) {
                 var name = this[i];
-                var value = this[i+1];
-                if (str !== '') str += '&';
+                var value = this[i + 1];
+                if (str!== '') str += '&';
                 str += name + '=' + encodeURIComponent(got.getValueContent(value));
               }
               return str
@@ -142,17 +147,17 @@ got = {
             if (this.contentType.indexOf('multipart') >= 0) {
               var str = '';
               var boundary = rand(20);
-              for(i = 0; i < this.length; i +=2) {
+              for (i = 0; i < this.length; i += 2) {
                 var name = this[i];
-                var value = this[i+1];
+                var value = this[i + 1];
                 str += '--' + boundary + '\r\n';
-                str += 'Content-Disposition: form-data; name="' + name +'";' 
+                str += 'Content-Disposition: form-data; name="' + name + '";'
 
-                if (typeof value === 'string' && value.indexOf('file://') >=0) {
+                if (typeof value === 'string' && value.indexOf('file://') >= 0) {
                   var filename = value.split(/[/\\]/).pop()
                   str += 'filename="' + filename + '"\r\nContent-Type: application/octet-stream';
                 }
-                if (typeof value === 'string' && value.indexOf('base64://') >=0) {
+                if (typeof value === 'string' && value.indexOf('base64://') >= 0) {
                   str += 'Content-Disposition: form-data; name="' + name + '"; filename="file.jpg"\r\nContent-Type: image/jpeg';
                 }
 
@@ -189,6 +194,7 @@ got = {
 
     headers = got.headersStringify(headers)
 
+    VAR_LAST_ERROR = ''
     _do(function () {
       _if(_iterator() > attempts, function () {
           fail_user("got error: " + VAR_LAST_ERROR)
@@ -219,15 +225,23 @@ got = {
             var data = http_client_encoded_content("auto")
 
           if (notEmpty &&!data.trim()) {
-            fail_user(url + ' empty response')
+            VAR_LAST_ERROR = url + ' empty response'
+            _next("function")
           }
+
           if (json) {
-            data = JSON.parse(data);
+            try {
+              data = JSON.parse(data);
+            } catch(e) {
+              VAR_LAST_ERROR = e
+              _next("function")
+            }
           }
 
           var status = http_client_status()
           if (statusAllow.indexOf(status) < 0) {
-            fail_user(url + ' http status: ' + status)
+            VAR_LAST_ERROR = url + ' empty response'
+            _next("function")
           }
           _function_return(data)
         }, null)!
@@ -259,6 +273,7 @@ got = {
       contentType = 'custom/' + contentType
     }
 
+    VAR_LAST_ERROR = ''
     _do(function () {
       _if(_iterator() > attempts, function () {
           fail_user("got error: " + VAR_LAST_ERROR)
@@ -278,7 +293,7 @@ got = {
                 'content-type': contentType,
                 encoding: encoding,
                 method: method.toUpperCase(),
-                headers: headers 
+                headers: headers
               })!
             }, function () {
               general_timeout_next(timeout);
@@ -293,16 +308,22 @@ got = {
             var data = http_client_encoded_content("auto")
 
           if (notEmpty &&!data.trim()) {
-            fail_user(url + ' empty response')
+            VAR_LAST_ERROR = url + ' empty response'
+            _next("function")
           }
-
           if (json) {
-            data = JSON.parse(data);
+            try {
+              data = JSON.parse(data);
+            } catch(e) {
+              VAR_LAST_ERROR = e
+              _next("function")
+            }
           }
 
           var status = http_client_status()
           if (statusAllow.indexOf(status) < 0) {
-            fail_user(url + ' http status: ' + status)
+            VAR_LAST_ERROR = url + ' empty response'
+            _next("function")
           }
 
           _function_return(data)
@@ -311,4 +332,4 @@ got = {
         sleep(pause)!
     })!
   }
-} 
+}
