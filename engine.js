@@ -12,20 +12,47 @@ got = {
     json: false,
   },
 
-  headersStringify: function (headers) {
+  headersStringify: function (headers, isConstructor) {
     var allHeaders = {};
 
     for (key in this.options.headers) {
-      allHeaders[key] = this.options.headers[key];
+      allHeaders[key.toLowerCase()] = this.options.headers[key];
+    }
+
+    if (typeof headers === 'string') {
+      var h = {};
+      headers.trim().split(/\r?\n/).forEach(function(row) {
+        var p = row.split(':')
+        var name = p[0].trim();
+        var value = p.slice(1).join(':').trim();
+        h[name] = value;
+      })
+
+      if (isConstructor) {
+        delete h['content-type'];
+        delete h['Content-Type'];
+      }
+
+      headers = h;
     }
 
     for (key in headers) {
-      allHeaders[key] = headers[key];
+      allHeaders[key.toLowerCase()] = headers[key];
     }
 
     return Object.keys(allHeaders).map(function (k) {
-      return k + ':' + allHeaders[k].toLowerCase();
+      return k + ':' + allHeaders[k];
     }).join('\r\n');
+  },
+
+  getValueContent: function(value) {
+    if (value.indexOf('file://') >=0) {
+      return native("filesystem", "readfile", JSON.stringify({value: value.split('file://')[1],base64:false,from:0,to:0}))
+    }
+    if (value.indexOf('base64://') >=0) {
+      return base64_decode(value.split('base64://')[1])
+    }
+    return value
   },
 
   createData: function (contentType) {
@@ -33,84 +60,114 @@ got = {
       throw new Error('for method createData required argument "contentType"')
     }
 
-    var data = {}
+    var isConstructor = contentType.indexOf('custom/') < 0
+    var data = isConstructor? [] : ['data'];
 
     Object.defineProperties(data, {
       contentType: {
         enumerable: false,
         value: contentType
       },
+      isConstructor: {
+        enumerable: false,
+        value: isConstructor
+      },
       add: {
         enumerable: false,
-        value: function (name, value, contentType) {
+        value: function (name, value) {
           var contentType = contentType || 'application/octet-stream';
-          if (this.contentType === 'multipart/form-data') {
-            this[name] = 'Content-Disposition: form-data; name=' + name + ';' +
-              '\r\n\r\n' + value
+          if (this.isConstructor) {
+            this.push(name, value);
           } else {
-            this[name] = value;
+            if (this.length > 1) {
+              fail_user('You cannot add more than 1 item to a container with the RAW content type');
+            }
+            this.push(name)
           }
         }
       },
       addFile: {
         enumerable: false,
-        value: function (name, file, filename, contentType) {
-          var filename = filename || name;
-          var contentType = contentType || 'application/octet-stream';
-          if (this.contentType === 'multipart/form-data') {
-            this[name] = 'Content-Disposition: form-data; name=' + name + '; filename=' + filename +
-              '\r\nContent-Type: ' + contentType +
-              '\r\n\r\n' + file
+        value: function (name, value) {
+          if (this.isConstructor) {
+            if (this.contentType === 'json') {
+              this.push(name, got.getValueContent('file://' + value));
+            } else {
+              this.push(name, 'file://' + value);
+            }
           } else {
-            this[name] = file;
+            fail_user('Forbidden for a container with the RAW content type');
           }
         }
       },
       addBase64: {
         enumerable: false,
-        value: function (name, base64, filename, contentType) {
-          var filename = filename || name;
-          var contentType = contentType || 'application/octet-stream';
-          if (this.contentType === 'multipart/form-data') {
-            this[name] = 'Content-Disposition: form-data; name=' + name + '; filename=' + filename +
-              '\r\nContent-Type: ' + contentType +
-              '\r\n\r\n_browserautomationstudio_base64:' + base64;
+        value: function (name, value) {
+          if (this.isConstructor) {
+            if (this.contentType === 'json') {
+              this.push(name, got.getValueContent('base64://' + value));
+            } else {
+              this.push(name, 'base64://' + value);
+            }
           } else {
-            this[name] = base64;
+            fail_user('Forbidden for a container with the RAW content type');
           }
         }
       },
       toString: {
         enumerable: false,
-        value: function (key, base64) {
-          var result = '';
-          var boundary = rand(20)
-          for (key in this) {
-            var value = this[key];
-            switch (this.contentType) {
-              case ('application/json'): {
-                return JSON.stringify(this);
+        value: function () {
+          if(this.isConstructor) {
+            if (this.contentType.indexOf('json') >= 0) {
+              var json = {}
+              for(i = 0; i < this.length; i +=2) {
+                var name = this[i];
+                var value = this[i+1];
+                json[name] = got.getValueContent(value);
               }
-              case ('multipart/form-data'): {
-                result += '--' + boundary + '\r\n';
-                result += value + '\r\n';
-                break;
-              }
-              case ('application/x-www-form-urlencoded'):
-              options: {
-                if (result!== '') {
-                  result += '&';
-                }
-                result += key + '=' + encodeURIComponent(value);
-              }
+              return JSON.stringify(json)
             }
 
-          }
+            if (this.contentType.indexOf('urlencode') >= 0) {
+              var str = '';
+              for(i = 0; i < this.length; i +=2) {
+                var name = this[i];
+                var value = this[i+1];
+                if (str !== '') str += '&';
+                str += name + '=' + encodeURIComponent(got.getValueContent(value));
+              }
+              return str
+            }
 
-          if (this.contentType === 'multipart/form-data') {
-            result += '--' + boundary + '--';
-          };
-          return result;
+            if (this.contentType.indexOf('multipart') >= 0) {
+              var str = '';
+              var boundary = rand(20);
+              for(i = 0; i < this.length; i +=2) {
+                var name = this[i];
+                var value = this[i+1];
+                str += '--' + boundary + '\r\n';
+                str += 'Content-Disposition: form-data; name="' + name +'";' 
+
+                if (value.indexOf('file://') >=0) {
+                  var filename = value.split(/[/\\]/).pop()
+                  str += 'filename="' + filename + '"\r\nContent-Type: application/octet-stream';
+                }
+                if (value.indexOf('base64://') >=0) {
+                  str += 'Content-Disposition: form-data; name="' + name + '"; filename="file.jpg"\r\nContent-Type: image/jpeg';
+                }
+
+                str += '\r\n\r\n'
+                str += got.getValueContent(value) + '\r\n';
+              }
+              return str + '--' + boundary + '--';
+            }
+          } else {
+            if (this.contentType.indexOf('json') >= 0) {
+              return typeof this[1] === 'string' ? this[1] : JSON.stringify(this[1])
+            } else {
+              return this[1];
+            }
+          }
         }
       },
     })
@@ -130,6 +187,8 @@ got = {
     var notEmpty = _function_argument('notEmpty') || options.notEmpty;
     var json = _function_argument('json') || options.json;
 
+    headers = got.headersStringify(headers)
+
     _do(function () {
       _if(_iterator() > attempts, function () {
           fail_user("got error: " + VAR_LAST_ERROR)
@@ -147,13 +206,13 @@ got = {
               general_timeout_next(timeout);
               http_client_get2(url, {
                 method: method.toUpperCase(),
-                headers: got.headersStringify(headers)
+                headers: headers
               })!
             }, function () {
               general_timeout_next(timeout);
               http_client_get_noredirect2(url, {
                 method: method.toUpperCase(),
-                headers: got.headersStringify(headers)
+                headers: headers
               })!
             })!
 
@@ -183,14 +242,22 @@ got = {
     var method = _function_argument('method') || 'POST';
     var encoding = _function_argument('encoding') || 'UTF-8';
     var headers = _function_argument('headers') || {};
+    var body = _function_argument('body') || [];
+    var contentType = _function_argument('contentType') || 'urlencode';
     var redirect = _function_argument('redirect') || options.redirect;
-    var body = _function_argument('body') || '';
     var attempts = _function_argument('attempts') || options.attempts;
     var timeout = _function_argument('timeout') || options.timeout;
     var pause = _function_argument('pause') || options.pause;
     var statusAllow = _function_argument('status') || options.status;
     var notEmpty = _function_argument('notEmpty') || options.notEmpty;
     var json = _function_argument('json') || options.json;
+
+    var isConstructor = contentType.indexOf('custom/') < 0;
+    headers = got.headersStringify(headers, isConstructor);
+
+    if (!isConstructor) {
+      contentType = 'custom/' + contentType
+    }
 
     _do(function () {
       _if(_iterator() > attempts, function () {
@@ -205,24 +272,21 @@ got = {
             _break(1, true)
           })
 
-          _contentType = headers['content-type'] || headers['Content-Type'] || 'application/x-www-form-urlencoded';
-          delete headers['content-type'];
-          delete headers['Content-Type'];
           _if_else(redirect, function () {
               general_timeout_next(timeout);
-              http_client_post(url, ["data", body.toString()], {
-                "content-type": "custom/" + _contentType,
+              http_client_post(url, body, {
+                'content-type': contentType,
                 encoding: encoding,
                 method: method.toUpperCase(),
-                headers: got.headersStringify(headers)
+                headers: headers 
               })!
             }, function () {
               general_timeout_next(timeout);
-              http_client_post_no_redirect(url, ["data", body.toString()], {
-                "content-type": "custom/" + _contentType,
+              http_client_post_no_redirect(url, body, {
+                'content-type': contentType,
                 encoding: encoding,
                 method: method.toUpperCase(),
-                headers: got.headersStringify(headers)
+                headers: headers
               })!
             })!
 

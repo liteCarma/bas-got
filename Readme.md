@@ -46,9 +46,9 @@ This module is a simple api for working directly through the code.
       'user-agent': 'test',
       'content-type': 'application/x-www-form-urlencoded' // optional, default 'application/x-www-form-urlencoded'
     },
-    body: ''                    // string or data type object
+    body: []                    
     method: 'POST',             // optional, default 'POST'
-    encoding: 'UTF-8'            // optional, default 'UTF-8'
+    encoding: 'UTF-8'           // optional, default 'UTF-8'
     redirect: true,             // optional
     attempts: 3,                // optional
     timeout: 60000,             // optional
@@ -60,18 +60,19 @@ This module is a simple api for working directly through the code.
   var res = _result_function()
 ```
 
-##### method got.createData
 
-createData is an auxiliary method for creating a request body.
+<b>got.createData(contentType)</b> is an auxiliary method for creating a request body.If the query constructor is used, then the following values should be used: urlencode, json, multipart. If the raw data is used, when the suffix 'contentType/' should be added, for example: 'custom/multipart/form-data'
 ```
 var data = got.createData(contentType)
-data.add('key', 'value', contentType)
-data.addFile('key', 'value', filename, contentType)
-data.addBase64('key', 'value', filename, contentType)
+
+// NOTE: the addFile and addBase64 methods are available only if the constructor is used
+data.add(key, value)
+data.addFile(key, value)
+data.addBase64(key, value)
+
+// NOTE: if raw data is used, then only the add(value) method is available, with only one argument, it method can be called only once
+data.add(value)
+
 data.toString()   // automatic serialization according to the specified type
 data.contentType  // contentType
 ```
-+ contentType - 'multipart/form-data', 'application/x-www-form-urlencoded', 'application/json'
-+ Methods  addFile, addBase64 makes sense only for 'multipart/form-data'
-+ filename - optional, default is equal to the key
-+ contentType - optional, default is equal to the 'application/octet-stream'
