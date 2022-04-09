@@ -1,40 +1,364 @@
 {
-  "name": "got",
-  "description": "http request api",
-  "description_small": {
-      "en": "http request api",
-      "ru": "http request api"
-  },
-  "api_version": 1,
-  "major_version": 1,
-  "minor_version": 0,
-  "developer_name": "userTrue",
-  "developer_site": "",
-  "developer_email": "",
   "actions": [
     {
-        "is_element": false,
-        "name": "got"
+      "code": [{
+        "file": "got_proxy_code.js",
+        "name": "got_proxy_code"
+      }],
+      "description": {
+        "en": "Proxy",
+        "ru": "Прокси"
+      },
+      "interface": "got_proxy_interface.js",
+      "is_element": false,
+      "name": "gotGUISetProxy",
+      "select": "got_proxy_select.js",
+      "template": "{{proxyString}}"
+    },
+    {
+      "code": [{
+        "file": "got_get_code.js",
+        "name": "got_get_code"
+      }],
+      "description": {
+        "en": "Get",
+        "ru": "Get запрос"
+      },
+      "interface": "got_get_interface.js",
+      "is_element": false,
+      "name": "gotGUIGet",
+      "select": "got_get_select.js",
+      "template": "{{url}}"
+    },
+    {
+      "code": [{
+        "file": "got_post_code.js",
+        "name": "got_post_code"
+      }],
+      "description": {
+        "en": "Post",
+        "ru": "Post запрос"
+      },
+      "interface": "got_post_interface.js",
+      "is_element": false,
+      "name": "gotGUIPost",
+      "select": "got_post_select.js",
+      "template": "{{url}}"
+    },
+    {
+      "code": [{
+        "file": "got_content_code.js",
+        "name": "got_content_code"
+      }],
+      "description": {
+        "en": "Get response",
+        "ru": "Получить результат"
+      },
+      "interface": "got_Content_interface.js",
+      "is_element": false,
+      "name": "gotGUIGetContent",
+      "select": "got_content_select.js",
+      "template": "{{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_saveCookies_code.js",
+        "name": "got_saveCookies_code"
+      }],
+      "description": {
+        "en": "Save Cookies",
+        "ru": "Сохранить cookies"
+      },
+      "interface": "got_saveCookies_interface.js",
+      "is_element": false,
+      "name": "gotGUISaveCookies",
+      "select": "got_saveCookies_select.js",
+      "template": "{{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_restoreCookies_code.js",
+        "name": "got_restoreCookies_code"
+      }],
+      "description": {
+        "en": "Restore Cookies",
+        "ru": "Загрузить cookies"
+      },
+      "interface": "got_restoreCookies_interface.js",
+      "is_element": false,
+      "name": "gotGUIRestoreCookies",
+      "select": "got_restoreCookies_select.js",
+      "template": "{{value}}"
+    },
+    {
+      "code": [{
+        "file": "got_loadCookiesFromBrowser_code.js",
+        "name": "got_loadCookiesFromBrowser_code"
+      }],
+      "description": {
+        "en": "Load cookies from browser",
+        "ru": "Загрузить cookies из браузера"
+      },
+      "interface": "got_loadCookiesFromBrowser_interface.js",
+      "is_element": false,
+      "name": "gotGUILoadCookiesFromBrowser",
+      "select": "got_loadCookiesFromBrowser_select.js",
+      "template": ""
+    },
+    {
+      "code": [{
+        "file": "got_reset_code.js",
+        "name": "got_reset_code"
+      }],
+      "description": {
+        "en": "Reset",
+        "ru": "Сброс"
+      },
+      "interface": "got_reset_interface.js",
+      "is_element": false,
+      "name": "gotGUIReset",
+      "select": "got_reset_select.js",
+      "template": ""
+    },
+    {
+      "code": [{
+        "file": "got_download_code.js",
+        "name": "got_download_code"
+      }],
+      "description": {
+        "en": "Download",
+        "ru": "Скачать"
+      },
+      "interface": "got_download_interface.js",
+      "is_element": false,
+      "name": "gotGUIDownload",
+      "select": "got_download_select.js",
+      "template": "{{value}} -> {{File}}"
+    },
+    {
+      "code": [{
+        "file": "got_url_code.js",
+        "name": "got_url_code"
+      }],
+      "description": {
+        "en": "Current Url",
+        "ru": "Текущий Url"
+      },
+      "interface": "got_url_interface.js",
+      "is_element": false,
+      "name": "gotGUIUrl",
+      "select": "got_url_select.js",
+      "template": "{{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_status_code.js",
+        "name": "got_status_code"
+      }],
+      "description": {
+        "en": "Status",
+        "ru": "Статус ответа"
+      },
+      "interface": "got_Status_interface.js",
+      "is_element": false,
+      "name": "gotGUIStatus",
+      "select": "got_status_select.js",
+      "template": "{{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_getHeader_code.js",
+        "name": "got_getHeader_code"
+      }],
+      "description": {
+        "en": "Get Header",
+        "ru": "Получить заголовок"
+      },
+      "interface": "got_getHeader_interface.js",
+      "is_element": false,
+      "name": "gotGUIGetHeader",
+      "select": "got_getHeader_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_setHeader_code.js",
+        "name": "got_setHeader_code"
+      }],
+      "description": {
+        "en": "Set Header",
+        "ru": "Установить заголовок"
+      },
+      "interface": "got_setHeader_interface.js",
+      "is_element": false,
+      "name": "gotGUISetHeader",
+      "select": "got_setHeader_select.js",
+      "template": "{{value}} -> {{mame}}"
+    },
+    {
+      "code": [{
+        "file": "got_clearHeaders_code.js",
+        "name": "got_clearHeaders_code"
+      }],
+      "description": {
+        "en": "Clear Headers",
+        "ru": "Очистить заголовки"
+      },
+      "interface": "got_clearHeaders_interface.js",
+      "is_element": false,
+      "name": "gotGUIClearHeaders",
+      "select": "got_clearHeaders_select.js",
+      "template": ""
+    },
+     {
+      "code": [{
+        "file": "got_xpathGetXml_code.js",
+        "name": "got_xpathGetXml_code"
+      }],
+      "description": {
+        "en": "Xpath Get Xml",
+        "ru": "Xpath получить xml"
+      },
+      "interface": "got_xpathGetXml_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetXml",
+      "select": "got_xpathGetXml_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_xpathGetXmlList_code.js",
+        "name": "got_xpathGetXmlList_code"
+      }],
+      "description": {
+        "en": "Xpath Get Xml List",
+        "ru": "Xpath получить каждый xml"
+      },
+      "interface": "got_xpathGetXmlList_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetXmlList",
+      "select": "got_xpathGetXmlList_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_xpathGetText_code.js",
+        "name": "got_xpathGetText_code"
+      }],
+      "description": {
+        "en": "Xpath Get Text",
+        "ru": "Xpath получить текст"
+      },
+      "interface": "got_xpathGetText_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetText",
+      "select": "got_xpathGetText_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_xpathGetTextList_code.js",
+        "name": "got_xpathGetTextList_code"
+      }],
+      "description": {
+        "en": "Xpath Get Text List",
+        "ru": "Xpath получить каждый текст"
+      },
+      "interface": "got_xpathGetTextList_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetTextList",
+      "select": "got_xpathGetTextList_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_xpathGetCount_code.js",
+        "name": "got_xpathGetCount_code"
+      }],
+      "description": {
+        "en": "Xpath Get Count",
+        "ru": "Xpath получить количество элементов"
+      },
+      "interface": "got_XpathGetCount_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetCount",
+      "select": "got_xpathGetCount_select.js",
+      "template": "{{value}} -> {{save}}"
+    },
+    {
+      "code": [{
+        "file": "got_xpathGetExists_code.js",
+        "name": "got_xpathGetExists_code"
+      }],
+      "description": {
+        "en": "Xpath Get Exists",
+        "ru": "Xpath проверить существование"
+      },
+      "interface": "got_xpathGetExists_interface.js",
+      "is_element": false,
+      "name": "gotGUIXpathGetExists",
+      "select": "got_xpathGetExists_select.js",
+      "template": "{{value}} -> {{save}}"
     }
   ],
-  "browser": [
-  ],
+  "api_version": 1,
+  "autogenerated_functions": ["got", "gotGUI"],
+  "browser": [],
   "depends": [],
-  "embeddeddata": [
-  ],
-  "engine": [
-      "engine.js"
-  ],
+  "description": "HTTP-Client wrapper",
+  "description_small": {
+    "en": "Got HTTP-Client wrapper",
+    "ru": "Got HTTP-клиент wrapper"
+  },
+  "developer_email": "litecarma@gmail.com",
+  "developer_name": "usertrue",
+  "developer_site": "https://t.me/userTrue",
+  "embeddeddata": [],
+  "engine": ["engine.js"],
   "icon": "icon.png",
   "info": {
-      "en": "",
-      "ru": ""
+    "en": "HTTP client, very fast alternative to browser.",
+    "ru": "HTTP-клиент, очень быстрая альтернатива браузеру."
   },
   "is_autogenerated": true,
-  "languages": [
-  ],
+  "languages": [],
   "localize": {
+    "is empty": {
+      "ru": "пуст"
+    },
+    "Maximum failures": {
+      "ru": "Максимум неудач"
+    },
+    "Internal client": {
+      "ru": "Внутренний клиент"
+    },
+    "Timeout (seconds)": {
+      "ru": "Таймаут (секунды)"
+    },
+    "Maximum request execution time.": {
+      "ru": "Максимальное время выполнения запроса."
+    },
+    "The variable to which the result is saved is missing": {
+      "ru": "Переменная, в которую сохраняется результат, отсутствует"
+    },
+    "The maximum number of failed requests after which the action will be completed with an error.": {
+      "ru": "Максимальное количество неудачных запросов после которого действие будет завершено с ошибкой."
+    },
+    "Pause after an unsuccessful request (seconds)": {
+      "ru": "Пауза после неудачного запроса"
+    },
+    "Allowed http status codes": {
+      "ru": "Разрешенные http статус коды"
+    },
+    "Empty response is an error": {
+      "ru": "Пустой ответ является ошибкой"
+    },
+    "Expect a response in json format and parse it immediately": {
+      "ru": "Ожидайть ответа в формате json и немедленно его парсить"
+    }
   },
-  "modules": [
-  ]
+  "major_version": 1,
+  "minor_version": 1,
+  "modules": [],
+  "name": "got"
 }

@@ -1,0 +1,2 @@
+_call_function(gotGUI.post,{useConstructor:<%=useConstructor%>,url:<%=url%>,headers:<%=headers%>,params:<%=params%>,postDataRaw:<%=postDataRaw%>,contentType:<%=contentType%>,contentTypeRaw:<%=contentTypeRaw%>,method:<%=method%>,encoding:<%=encoding%>,redirect:<%=redirect%>,timeout:<%=timeout%>,attempts:<%=attempts%>,pause:<%=pause%>,statusAllow:<%=statusAllow%>,notEmpty:<%=notEmpty%>,json:<%=isJson%>,internalClient: <%=internalClient%>})!
+got_SAVED_CONTENT = _result_function()
