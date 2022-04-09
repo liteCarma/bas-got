@@ -22,7 +22,7 @@
       <input type="checkbox" id="notEmpty" checked="checked"/> <label for="notEmpty" class="tr">Empty response is an error</label>
     </div>
     <div data-preserve="true" data-preserve-type="check" data-preserve-id="isJson">
-      <input type="checkbox" id="isJson"/> <label for="isJson" class="tr">Expect a response in json format and parse it immediately</label>
+      <input type="checkbox" id="isJson"/> <label for="isJson" class="tr">Expect a response in json format</label>
     </div>
     <div data-preserve="true" data-preserve-type="check" data-preserve-id="internalClient">
 		  <input type="checkbox" id="internalClient"/> <label for="internalClient" class="tr">Use internal client</label>

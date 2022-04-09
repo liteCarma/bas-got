@@ -353,8 +353,8 @@
     "Empty response is an error": {
       "ru": "Пустой ответ является ошибкой"
     },
-    "Expect a response in json format and parse it immediately": {
-      "ru": "Ожидайть ответа в формате json и немедленно его парсить"
+    "Expect a response in json format": {
+      "ru": "Ожидать ответ в формате json"
     }
   },
   "major_version": 1,
