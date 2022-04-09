@@ -194,10 +194,6 @@ got = {
 
     VAR_LAST_ERROR = ''
     _do(function () {
-      _if(_iterator() > attempts, function () {
-          fail_user("got error: " + VAR_LAST_ERROR)
-        })!
-
         _call(function () {
           _on_fail(function () {
             VAR_LAST_ERROR = _result()
@@ -243,6 +239,10 @@ got = {
           }
           _function_return(data)
         }, null)!
+
+        _if(_iterator() >= attempts, function () {
+          fail_user("got error: " + VAR_LAST_ERROR)
+        })!
 
         sleep(pause)!
     })!
@@ -326,6 +326,10 @@ got = {
 
           _function_return(data)
         }, null)!
+
+        _if(_iterator() >= attempts, function () {
+          fail_user("got error: " + VAR_LAST_ERROR)
+        })!
 
         sleep(pause)!
     })!
