@@ -38,7 +38,7 @@ This module is a simple api for working directly through the code.
 ```
 ##### method POST (PUT, PATCH)
 ```
-  _call_function(got.get,{
+  _call_function(got.post,{
     url: 'http://example.com',
     headers: {                  // optional
       'user-agent': 'test',
