@@ -44,6 +44,12 @@ got = {
     }).join('\r\n');
   },
 
+  normalizeURL: function (url) {
+    return url.replace(/https?:\/\/[^/]+$/, function(match){
+      return match + '/';
+    })
+  },
+
   getValueContent: function (value) {
     if (typeof value === 'string' && value.indexOf('file://') >= 0) {
       return native("filesystem", "readfile", JSON.stringify({
@@ -191,7 +197,8 @@ got = {
     var notEmpty = _function_argument('notEmpty') || options.notEmpty;
     var json = _function_argument('json') || options.json;
 
-    headers = got.headersStringify(headers)
+    url = got.normalizeURL(url);
+    headers = got.headersStringify(headers);
 
     VAR_LAST_ERROR = ''
     _do(function () {
@@ -266,6 +273,7 @@ got = {
     var json = _function_argument('json') || options.json;
 
     var isConstructor = contentType.indexOf('custom/') < 0;
+    url = got.normalizeURL(url);
     headers = got.headersStringify(headers, isConstructor);
 
     if (!isConstructor) {
