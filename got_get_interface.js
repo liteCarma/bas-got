@@ -12,7 +12,7 @@
 	<%= _.template($('#input_constructor').html())({id:"timeout", description:tr("Timeout (seconds)"), default_selector: "int", disable_string:true, value_number: 60, min_number:1, max_number:999999, help: {description: tr("Maximum request execution time.")} }) %>
 	<%= _.template($('#input_constructor').html())({id:"attempts", description:tr("Maximum failures"), default_selector: "int", disable_string:true, value_number: 3, min_number:1, max_number:999999, help: {description: tr("The maximum number of failed requests after which the action will be completed with an error.")} }) %>
   <%= _.template($('#input_constructor').html())({id:"pause", description:tr("Pause after an unsuccessful request (seconds)"), default_selector: "int", disable_string:true, value_number: 1, min_number:1, max_number:999999, help: {description: tr("Pause after an unsuccessful request (seconds)")} }) %>
-  <%= _.template($('#input_constructor').html())({id:"statusAllow", description:tr("Allowed http status codes"), default_selector: "string", disable_int:true, value_string: "200, 403, 429", help: {description: tr("Allowed http status codes"), examples:[{code:"200,429,403"},{code:"200"}]}}) %>
+  <%= _.template($('#input_constructor').html())({id:"statusAllow", description:tr("Allowed http status codes"), default_selector: "string", disable_int:true, value_string: "200, 201, 301, 302, 400, 403, 429", help: {description: tr("Allowed http status codes"), examples:[{code:"200,429,403"},{code:"200"}]}}) %>
 
 	<div class="col-xs-12">
     <div data-preserve="true" data-preserve-type="check" data-preserve-id="redirect">
