@@ -242,7 +242,7 @@ got = {
 
           var status = http_client_status()
           if (statusAllow.indexOf(status) < 0) {
-            VAR_LAST_ERROR = url + ' empty response'
+            VAR_LAST_ERROR = url + ' bad http status'
             _next("function")
           }
           _function_return(data)
@@ -314,7 +314,7 @@ got = {
 
             var data = http_client_encoded_content("auto")
 
-          if (notEmpty &&!data.trim()) {
+          if (notEmpty && !data.trim()) {
             VAR_LAST_ERROR = url + ' empty response'
             _next("function")
           }
@@ -329,7 +329,7 @@ got = {
 
           var status = http_client_status()
           if (statusAllow.indexOf(status) < 0) {
-            VAR_LAST_ERROR = url + ' empty response'
+            VAR_LAST_ERROR = url + ' bad http status'
             _next("function")
           }
 
