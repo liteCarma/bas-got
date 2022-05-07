@@ -194,7 +194,8 @@ got = {
     var timeout = _function_argument('timeout') || options.timeout;
     var pause = _function_argument('pause') || options.pause;
     var statusAllow = _function_argument('status') || options.status;
-    var notEmpty = _function_argument('notEmpty') || options.notEmpty;
+    var notEmpty = _function_argument('notEmpty');
+    notEmpty = notEmpty != null ? notEmpty : options.notEmpty;
     var json = _function_argument('json') || options.json;
 
     url = got.normalizeURL(url);
@@ -269,7 +270,8 @@ got = {
     var timeout = _function_argument('timeout') || options.timeout;
     var pause = _function_argument('pause') || options.pause;
     var statusAllow = _function_argument('status') || options.status;
-    var notEmpty = _function_argument('notEmpty') || options.notEmpty;
+    var notEmpty = _function_argument('notEmpty');
+    notEmpty = notEmpty != null ? notEmpty : options.notEmpty;
     var json = _function_argument('json') || options.json;
 
     var isConstructor = contentType.indexOf('custom/') < 0;
