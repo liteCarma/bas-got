@@ -189,7 +189,8 @@ got = {
     var url = _function_argument('url');
     var method = _function_argument('method') || 'GET';
     var headers = _function_argument('headers') || {};
-    var redirect = _function_argument('redirect') || options.redirect;
+    var redirect = _function_argument('redirect');
+    redirect = redirect != null ? redirect : options.redirect;
     var attempts = _function_argument('attempts') || options.attempts;
     var timeout = _function_argument('timeout') || options.timeout;
     var pause = _function_argument('pause') || options.pause;
@@ -219,7 +220,7 @@ got = {
               })!
             }, function () {
               general_timeout_next(timeout);
-              http_client_get_noredirect2(url, {
+              http_client_get_no_redirect2(url, {
                 method: method.toUpperCase(),
                 headers: headers
               })!
@@ -265,7 +266,8 @@ got = {
     var headers = _function_argument('headers') || options.headers;
     var body = _function_argument('body') || [];
     var contentType = _function_argument('contentType') || 'urlencode';
-    var redirect = _function_argument('redirect') || options.redirect;
+    var redirect = _function_argument('redirect');
+    redirect = redirect != null ? redirect : options.redirect;
     var attempts = _function_argument('attempts') || options.attempts;
     var timeout = _function_argument('timeout') || options.timeout;
     var pause = _function_argument('pause') || options.pause;
